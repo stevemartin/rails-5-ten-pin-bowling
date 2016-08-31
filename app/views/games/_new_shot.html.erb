@@ -1,0 +1,15 @@
+<%= form_for(@game, remote: true) do |f| %>
+  <%= f.fields_for :shots, @game.shots.build do |shot| %>
+    <%= shot.hidden_field :player, value: session[:player] %>
+    <%= shot.hidden_field :frame, value: session[:frame] %>
+    <%= shot.hidden_field :number, value: session[:shot_number] %>
+    <div class="field">
+      <%= shot.label :pins %>
+      <%= shot.number_field :pins %>
+    </div>
+  <% end %>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
+

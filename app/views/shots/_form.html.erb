@@ -1,0 +1,42 @@
+<%= form_for(shot) do |f| %>
+  <% if shot.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(shot.errors.count, "error") %> prohibited this shot from being saved:</h2>
+
+      <ul>
+      <% shot.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :game_id %>
+    <%= f.text_field :game_id %>
+  </div>
+
+  <div class="field">
+    <%= f.label :number %>
+    <%= f.number_field :number %>
+  </div>
+
+  <div class="field">
+    <%= f.label :frame %>
+    <%= f.number_field :frame %>
+  </div>
+
+  <div class="field">
+    <%= f.label :player %>
+    <%= f.number_field :player %>
+  </div>
+
+  <div class="field">
+    <%= f.label :pins %>
+    <%= f.number_field :pins %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

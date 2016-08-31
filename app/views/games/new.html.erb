@@ -1,0 +1,11 @@
+<h1>New Game</h1>
+
+<%= render 'form', game: @game %>
+
+<%= link_to 'Back', games_path %>
+
+<%= opal_tag do %>
+  Document.ready? do
+    @games_view = GamesView.new
+  end
+<% end %>

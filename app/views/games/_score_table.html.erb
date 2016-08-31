@@ -1,0 +1,64 @@
+<table>
+    <thead>
+        <tr>
+          <th>
+          </th>
+          <th>
+            Frame 1
+          </th>
+          <th>
+            Frame 2
+          </th>
+          <th>
+            Frame 3
+          </th>
+          <th>
+            Frame 4
+          </th>
+          <th>
+            Frame 5
+          </th>
+          <th>
+            Frame 6
+          </th>
+          <th>
+            Frame 7
+          </th>
+          <th>
+            Frame 8
+          </th>
+          <th>
+            Frame 9
+          </th>
+          <th>
+            Frame 10
+          </th>
+          <th>
+            Total
+          </th>
+        </tr>
+    </thead>
+    <tbody>
+      <% @game.players.times do |player_num| %>
+        <% player_num += 1 %>
+        <tr>
+          <th>
+            Player: <%= player_num %>
+          </th>
+          <% session[:frame].times do |frame_num| %>
+            <% frame_num += 1 %>
+            <td>
+            <% @game.shots.where(player: player_num, frame: frame_num).order(:number).each do |shot| %>
+              <%= shot.pins %>
+            <% end %>
+            </td>
+          <% end %>
+          <% (10 - session[:frame]).times do |empty_frame| %>
+            <td>Empty</td>
+          <% end %>
+          <td><%= @game.shots.where(player: player_num).map(&:pins).reduce(0, :+) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+</table>
+

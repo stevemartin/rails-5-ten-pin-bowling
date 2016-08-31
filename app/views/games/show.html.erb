@@ -1,0 +1,23 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Game: <%= @game.id %></h1>
+<p>
+  <strong>Players:</strong>
+  <%= @game.players %>
+</p>
+
+<p>
+  Current Player: <%= session[:player] %>
+</p>
+<p>
+  Current Frame: <%= session[:frame] %>
+</p>
+<p>
+  Current Shot: <%= session[:shot_number] %>
+</p>
+
+<%= render partial: 'new_shot' %>
+<%= render partial: 'score_table' %>
+
+<%= link_to 'Edit', edit_game_path(@game) %> |
+<%= link_to 'Back', games_path %>
