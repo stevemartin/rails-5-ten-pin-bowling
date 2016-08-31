@@ -17,7 +17,7 @@
   <tbody>
     <% @shots.each do |shot| %>
       <tr>
-        <td><%= shot.game %></td>
+        <td><%= shot.game.id %></td>
         <td><%= shot.number %></td>
         <td><%= shot.frame %></td>
         <td><%= shot.player %></td>

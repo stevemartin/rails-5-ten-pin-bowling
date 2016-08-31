@@ -2,8 +2,9 @@ require 'rails_helper'
 
 RSpec.describe "shots/show", type: :view do
   before(:each) do
+    @game = Game.create(players: 2 )
     @shot = assign(:shot, Shot.create!(
-      :game => nil,
+      :game => @game,
       :number => 2,
       :frame => 3,
       :player => 4,
