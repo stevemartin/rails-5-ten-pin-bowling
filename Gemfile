@@ -14,6 +14,7 @@ gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.2'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
+gem 'bootstrap', '~> 4.0.0.alpha3.1'
 
 # Use opal as the JavaScript library
 gem 'opal-rails'
@@ -33,9 +34,11 @@ group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
   gem 'rspec-rails'
-  gem 'factory_girl_rails'
+  gem 'factory_girl_rails', require: true
   gem 'opal-rspec'
   gem 'rails-controller-testing'
+  gem 'pry'
+  gem 'pry-remote'
   # gem 'opal-rspec-rails'
 end
 

@@ -21,8 +21,17 @@ class GameEngine
     @shot_number = last_shot.number
 
     if first_shot?
-      @shot_number = 2
-      @strike = ten_pins_down?
+      if !tenth_frame? && @strike = ten_pins_down?
+        @shot_number = 1
+        if last_player?
+          @player = 1
+          @frame += 1
+        else
+          @player += 1
+        end
+      else
+        @shot_number = 2
+      end
     else
       if in_tenth_strike? || in_tenth_spare?
         @shot_number += 1
@@ -55,7 +64,7 @@ class GameEngine
   end
 
   def in_tenth_strike?
-    tenth_frame? && @strike && @last_shot.number < 4
+    tenth_frame? && @strike && @last_shot.number < 3
   end
 
   def in_tenth_spare?
@@ -78,19 +87,3 @@ class GameEngine
     @last_shot.frame == 10
   end
 end
-
-=begin
-  if last_shot.number == 2
-    session[:player] += 1
-
-    if last_shot.player == @game.players
-      session[:frame] += 1
-    end
-
-  end
-  if last_shot.frame == 10
-    session[:frame] += 1
-  end
-  session[:player]
-  session[:shot] = shot.number
-=end

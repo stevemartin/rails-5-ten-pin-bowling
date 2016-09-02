@@ -35,13 +35,6 @@ RSpec.describe GamesController, type: :controller do
     end
   end
 
-  describe "GET #edit" do
-    it "assigns the requested game as @game" do
-      get :edit, params: {id: game.to_param}, session: valid_session
-      expect(assigns(:game)).to eq(game)
-    end
-  end
-
   describe "POST #create" do
     context "with valid params" do
       it "creates a new Game" do
@@ -92,12 +85,6 @@ RSpec.describe GamesController, type: :controller do
         { players: 4}
       }
 
-      it "updates the requested game" do
-        put :update, params: {id: game.to_param, game: new_attributes}, session: valid_session
-        game.reload
-        skip("Add assertions for updated state")
-      end
-
       it "assigns the requested game as @game" do
         put :update, params: {id: game.to_param, game: new_attributes}, session: valid_session
         expect(assigns(:game)).to eq(game)
@@ -130,7 +117,7 @@ RSpec.describe GamesController, type: :controller do
 
       it "re-renders the 'edit' template" do
         put :update, params: {id: game.to_param, game: invalid_attributes}, session: valid_session
-        expect(response).to render_template("edit")
+        expect(response).to render_template("games/show")
       end
     end
   end

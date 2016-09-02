@@ -11,12 +11,12 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= f.label :players %>
-    <%= f.number_field :players %>
+  <div class="field form-group">
+    <%= f.label :players, class: 'sr-only' %>
+    <%= f.number_field :players , class: 'form-control', placeholder: 'Number of Players' %>
   </div>
 
-  <div class="actions">
-    <%= f.submit %>
+  <div class="actions form-group">
+    <%= f.submit "Start", class: 'btn btn-primary' %>
   </div>
 <% end %>

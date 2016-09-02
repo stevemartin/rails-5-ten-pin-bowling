@@ -1,23 +1,48 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Game: <%= @game.id %></h1>
-<p>
-  <strong>Players:</strong>
-  <%= @game.players %>
-</p>
+<header class='header'>
+<div class='row'>
+  <div class='col-xs-4'>
+    <h1 class='font-italic'><strong>Game:</strong>
+    <%= @game.id %></h1>
+  </div>
+  <div class='col-xs-8'>
+    <h1 class='text-xs-right font-italic'>
+    <strong>Players:</strong>
+    <%= @game.players %>
+    </h1>
+  </div>
+</div>
+</header>
 
-<p>
-  Current Player: <%= session[:player] %>
-</p>
-<p>
-  Current Frame: <%= session[:frame] %>
-</p>
-<p>
-  Current Shot: <%= session[:shot_number] %>
-</p>
+<div class='row'>
+  <div class='col-xs-4'>
+  <section class='card'>
+    <header class='card-title'>
+      <h4>Current Player</h4>
+    </header>
+    <div class='card-text'><h1><%= session[:player] %></h1></div>
+  </section>
+  </div>
+  <div class='col-xs-4'>
+  <section class='card'>
+    <header class='card-title'>
+      <h4>Current Frame</h4>
+    </header>
+    <div class='card-text'><h1><%= session[:frame] %></h1></div>
+  </section>
+  </div>
+  <div class='col-xs-4'>
+  <section class='card'>
+    <header class='card-title'>
+      <h4>Current Shot</h4>
+    </header>
+    <div class='card-text'><h1><%= session[:shot_number] %></h1></div>
+  </section>
+  </div>
+</div>
 
 <%= render partial: 'new_shot' %>
 <%= render partial: 'score_table' %>
 
-<%= link_to 'Edit', edit_game_path(@game) %> |
 <%= link_to 'Back', games_path %>

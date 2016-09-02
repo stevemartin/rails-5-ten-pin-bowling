@@ -1,64 +1,74 @@
-<table>
+<div class='table-responsive'>
+  <table class='table table-striped'>
     <thead>
-        <tr>
-          <th>
-          </th>
-          <th>
-            Frame 1
-          </th>
-          <th>
-            Frame 2
-          </th>
-          <th>
-            Frame 3
-          </th>
-          <th>
-            Frame 4
-          </th>
-          <th>
-            Frame 5
-          </th>
-          <th>
-            Frame 6
-          </th>
-          <th>
-            Frame 7
-          </th>
-          <th>
-            Frame 8
-          </th>
-          <th>
-            Frame 9
-          </th>
-          <th>
-            Frame 10
-          </th>
-          <th>
-            Total
-          </th>
-        </tr>
+      <tr>
+        <th>
+          &nbsp;
+        </th>
+        <th>
+          Frame 1
+        </th>
+        <th>
+          Frame 2
+        </th>
+        <th>
+          Frame 3
+        </th>
+        <th>
+          Frame 4
+        </th>
+        <th>
+          Frame 5
+        </th>
+        <th>
+          Frame 6
+        </th>
+        <th>
+          Frame 7
+        </th>
+        <th>
+          Frame 8
+        </th>
+        <th>
+          Frame 9
+        </th>
+        <th>
+          Frame 10
+        </th>
+        <th>
+          Total
+        </th>
+      </tr>
     </thead>
     <tbody>
       <% @game.players.times do |player_num| %>
         <% player_num += 1 %>
+        <% score_calc = CalculateScore.new(@game.shots.where(player: player_num)) %>
+        <% running_scores = RunningScore.new(score_calc) %>
         <tr>
           <th>
             Player: <%= player_num %>
-          </th>
-          <% session[:frame].times do |frame_num| %>
-            <% frame_num += 1 %>
-            <td>
+        </th>
+        <% session[:frame].times do |frame_num| %>
+          <% frame_num += 1 %>
+          <td>
             <% @game.shots.where(player: player_num, frame: frame_num).order(:number).each do |shot| %>
-              <%= shot.pins %>
+              <% running_scores.accumulate(frame_num, shot) %>
+              <% if running_scores.score > 0 %>
+                <%= shot.pins %>
+                <b><%= running_scores.score %></b>
+              <% else %>
+                <%= shot.pins %>
+              <% end %>
             <% end %>
-            </td>
-          <% end %>
-          <% (10 - session[:frame]).times do |empty_frame| %>
-            <td>Empty</td>
-          <% end %>
-          <td><%= @game.shots.where(player: player_num).map(&:pins).reduce(0, :+) %></td>
+          </td>
+        <% end %>
+        <% (10 - session[:frame]).times do |empty_frame| %>
+          <td>&nbsp;</td>
+        <% end %>
+        <td><b><%= running_scores.total_score %></b></td>
         </tr>
       <% end %>
     </tbody>
-</table>
-
+  </table>
+</div>

@@ -1,5 +1,4 @@
-require 'spec_helper'
-require 'game_engine'
+require 'rails_helper'
 
 describe GameEngine do
   let(:session)   { {} }
@@ -19,13 +18,23 @@ describe GameEngine do
     let(:player) { 1 }
     let(:frame) { 1 }
     let(:number) { 1 }
-    let(:pins) { 10 }
+    let(:pins) { 9 }
 
-    it 'updates to the shot' do
+    it 'moves to the second shot' do
       subject.update(last_shot)
       expect(subject.status[:player]).to eq(1)
       expect(subject.status[:frame]).to eq(1)
       expect(subject.status[:shot_number]).to eq(2)
+    end
+
+    context 'and scored a strike' do
+      let(:pins) { 10 }
+      it 'moves to the second player' do
+        subject.update(last_shot)
+        expect(subject.status[:player]).to eq(2)
+        expect(subject.status[:frame]).to eq(1)
+        expect(subject.status[:shot_number]).to eq(1)
+      end
     end
   end
 
@@ -47,7 +56,7 @@ describe GameEngine do
     let(:player) { 2 }
     let(:frame) { 1 }
     let(:number) { 1 }
-    let(:pins) { 10 }
+    let(:pins) { 9 }
 
     it 'updates the shot' do
       subject.update(last_shot)
@@ -61,7 +70,7 @@ describe GameEngine do
     let(:player) { 2 }
     let(:frame) { 1 }
     let(:number) { 2 }
-    let(:pins) { 10 }
+    let(:pins) { 9 }
 
     it 'updates the frame' do
       subject.update(last_shot)
@@ -75,7 +84,7 @@ describe GameEngine do
     let(:player) { 2 }
     let(:frame) { 9 }
     let(:number) { 2 }
-    let(:pins) { 10 }
+    let(:pins) { 9 }
 
     it 'updates to the shot' do
       subject.update(last_shot)
@@ -117,11 +126,11 @@ describe GameEngine do
   end
 
   context 'when the last player scores a strike in the tenth frame' do
-    let(:session)   { { strike: true, spare: true } }
-    let(:player) { 2 }
-    let(:frame) { 10 }
-    let(:number) { 1 }
-    let(:pins) { 10 }
+    let(:session) { { strike: true, spare: true } }
+    let(:player)  { 2 }
+    let(:frame)   { 10 }
+    let(:number)  { 1 }
+    let(:pins)    { 10 }
 
     it 'updates to the shot' do
       subject.update(last_shot)

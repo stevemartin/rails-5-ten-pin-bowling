@@ -12,16 +12,6 @@
 
 ActiveRecord::Schema.define(version: 20160830184340) do
 
-  create_table "frames", force: :cascade do |t|
-    t.integer  "game_id"
-    t.integer  "player_number"
-    t.integer  "frame_number"
-    t.integer  "total"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
-    t.index ["game_id"], name: "index_frames_on_game_id"
-  end
-
   create_table "games", force: :cascade do |t|
     t.integer  "players"
     t.datetime "created_at", null: false
@@ -30,12 +20,12 @@ ActiveRecord::Schema.define(version: 20160830184340) do
 
   create_table "shots", force: :cascade do |t|
     t.integer  "game_id"
-    t.integer  "number"
-    t.integer  "frame"
-    t.integer  "player"
+    t.integer  "number",     default: 0
+    t.integer  "frame",      default: 0
+    t.integer  "player",     default: 0
     t.integer  "pins"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
     t.index ["game_id"], name: "index_shots_on_game_id"
   end
 
