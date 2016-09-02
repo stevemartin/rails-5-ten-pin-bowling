@@ -19,6 +19,8 @@ class GameEngine
     @player = last_shot.player
     @frame = last_shot.frame
     @shot_number = last_shot.number
+    @strike = false
+    @spare = false
 
     if !tenth_frame?
       if strike?
@@ -30,18 +32,12 @@ class GameEngine
         @shot_number = 1
         increment_player_or_frame
       elsif first_shot?
-        @strike = false
-        @spare = false
         @shot_number = 2
       elsif standard_frame_ended?
-        @strike = false
-        @spare = false
         @frame += 1
         @player = 1
         @shot_number = 1
       elsif second_shot?
-        @strike = false
-        @spare = false
         @player += 1
         @shot_number = 1
       end
@@ -53,12 +49,9 @@ class GameEngine
         @strike = true
         @shot_number += 1
       elsif spare?
-        @strike = false
         @spare = true
         @shot_number += 1
       elsif third_shot?
-        @strike = false
-        @spare = false
         @shot_number = @shot_number
         @frame = @frame
 
@@ -69,8 +62,6 @@ class GameEngine
           @shot_number = 1 unless last_player?
         end
       else
-        @strike = false
-        @spare = false
         @shot_number += 1
       end
     end
