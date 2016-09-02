@@ -19,6 +19,7 @@ class GamesController < ApplicationController
     respond_to do |format|
       if @game.save
         session[:frame] = session[:player] = session[:shot_number] = 1
+        session[:game_over] = session[:strike] = session[:spare] = false
         format.html { redirect_to @game, notice: 'Welcome to the game!' }
         format.json { render :show, status: :created, location: @game }
       else

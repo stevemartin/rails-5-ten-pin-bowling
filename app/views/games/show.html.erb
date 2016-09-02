@@ -42,7 +42,15 @@
   </div>
 </div>
 
-<%= render partial: 'new_shot' %>
+<% if session[:strike] %>
+    <div class='card-text'><h1>STRIKE!</h1></div>
+  <% elsif session[:spare] %>
+    <div class='card-text'><h1>SPARE!</h1></div>
+  <% elsif session[:game_over] %>
+    <div class='card-text'><h1>GAME OVER!</h1></div>
+<% end %>
+
+<%= render partial: 'new_shot' unless session[:game_over] %>
 <%= render partial: 'score_table' %>
 
 <%= link_to 'Back', games_path %>

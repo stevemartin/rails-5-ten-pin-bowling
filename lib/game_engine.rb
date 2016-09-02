@@ -7,83 +7,118 @@ class GameEngine
     @shot_number = 1
     @strike = session[:strike] || false
     @spare  = session[:spare] || false
+    @game_over = false
   end
 
   def status
-    { player: @player, frame: @frame, shot_number: @shot_number, strike: @strike, spare: @spare }
+    { player: @player, frame: @frame, shot_number: @shot_number, strike: @strike, spare: @spare, game_over: @game_over }
   end
 
   def update(last_shot)
     @last_shot = last_shot
-
     @player = last_shot.player
     @frame = last_shot.frame
     @shot_number = last_shot.number
 
-    if first_shot?
-      if !tenth_frame? && @strike = ten_pins_down?
+    if !tenth_frame?
+      if strike?
+        @strike = true
+        last_player? ? (@frame += 1 && @player = 1) : @player += 1
         @shot_number = 1
-        if last_player?
-          @player = 1
-          @frame += 1
-        else
-          @player += 1
-        end
-      else
-        @shot_number = 2
-      end
-    else
-      if in_tenth_strike? || in_tenth_spare?
-        @shot_number += 1
-      elsif tenth_frame_ended?
-        @frame = 1
+      elsif spare?
+        @spare = true
+        last_player? ? (@frame += 1 && @player = 1) : @player += 1
         @shot_number = 1
-        @player = 1
+      elsif first_shot?
         @strike = false
         @spare = false
-      else
+        @shot_number = 2
+      elsif standard_frame_ended?
+        @strike = false
+        @spare = false
+        @frame += 1
+        @player = 1
         @shot_number = 1
+      elsif second_shot?
+        @strike = false
+        @spare = false
         @player += 1
-        @spare = ten_pins_down?
+        @shot_number = 1
       end
-    end
+    else # tenth frame
+      if strike?
+        @strike = true
+        @shot_number += 1
+      elsif second_strike?
+        @strike = true
+        @shot_number += 1
+      elsif spare?
+        @strike = false
+        @spare = true
+        @shot_number += 1
+      elsif third_shot?
+        @strike = false
+        @spare = false
+        @shot_number = @shot_number
+        @frame = @frame
 
-    if standard_frame_ended?
-      @frame += 1
-      @player = 1
+        if last_player?
+          @game_over = true
+        else
+          @player += 1 unless last_player?
+          @shot_number = 1 unless last_player?
+        end
+      else
+        @strike = false
+        @spare = false
+        @shot_number += 1
+      end
     end
   end
 
   private
   def standard_frame_ended?
-    @last_shot.number == 2 && last_player? && !tenth_frame?
-  end
-
-  def tenth_frame_ended?
-    tenth_frame? && last_player? && !@strike && !@spare
-  end
-
-  def in_tenth_strike?
-    tenth_frame? && @strike && @last_shot.number < 3
-  end
-
-  def in_tenth_spare?
-     tenth_frame? && @spare && @last_shot.number < 3
-  end
-
-  def last_player?
-    @last_shot.player == @game.players
-  end
-
-  def first_shot?
-    @last_shot.number == 1
-  end
-
-  def ten_pins_down?
-    @last_shot.pins == 10
+    @shot_number == 2 && last_player? && !tenth_frame?
   end
 
   def tenth_frame?
-    @last_shot.frame == 10
+    @tenth_frame ||= @last_shot.frame == 10
+  end
+
+  def last_player?
+    @last_shot.player.to_i == @game.players.to_i
+  end
+
+  def first_shot?
+    @first_shot ||= @last_shot.number == 1
+  end
+
+  def third_shot?
+    @third_shot ||= @last_shot.number >= 3
+  end
+
+  def second_shot?
+    @second_shot ||= @last_shot.number == 2
+  end
+
+  def strike?
+    @strike = first_shot? && max_scored?
+  end
+
+  def second_strike?
+    @second_strike ||= @strike && second_shot? && max_scored?
+  end
+
+  def max_scored?
+    @max_scored ||= @last_shot.pins == 10
+  end
+
+  def spare?
+    @shots ||= @game.shots.where(player: @player, frame: @frame)
+    if @shots.size > 1 && !third_shot?
+      @shots[0..1].map(&:pins).reduce(0, :+) == 10
+    else
+      false
+    end
   end
 end

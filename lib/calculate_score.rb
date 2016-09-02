@@ -12,7 +12,7 @@ class CalculateScore
       score = map_score(1..2) if shot.number == 2
     elsif @shots.size > 1
       @frame_shots = @shots.select { |s| s.frame == shot.frame }
-      score = @frame_shots[0..1].map(&:pins).reduce(0, :+)
+      score = map_frame_shots
       if score == 10
         @subsequent_shots = @shots.select { |s| s.frame >= shot.frame }
         score = map_score(0..2)
@@ -25,6 +25,10 @@ class CalculateScore
   end
 
    private
+   def map_frame_shots
+     @frame_shots[0..1].map(&:pins).reduce(0, :+)
+   end
+
    def map_score(range)
      @subsequent_shots[range].map(&:pins).reduce(0, :+)
    end
