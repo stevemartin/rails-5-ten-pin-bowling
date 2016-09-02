@@ -53,6 +53,13 @@ class GameEngine
         @strike = false
         @spare = true
         @shot_number += 1
+      elsif second_shot? && !@strike
+        if last_player?
+          @game_over = true
+        else
+          @player += 1 unless last_player?
+          @shot_number = 1 unless last_player?
+        end
       elsif third_shot?
         @strike = false
         @spare = false
@@ -91,23 +98,23 @@ class GameEngine
   end
 
   def first_shot?
-    @first_shot ||= @last_shot.number == 1
+    @last_shot.number == 1
   end
 
   def third_shot?
-    @third_shot ||= @last_shot.number >= 3
+    @third_shot ||= (@last_shot.number >= 3)
   end
 
   def second_shot?
-    @second_shot ||= @last_shot.number == 2
+    @last_shot.number == 2
   end
 
   def strike?
-    @strike = first_shot? && max_scored?
+    first_shot? && max_scored?
   end
 
   def second_strike?
-    @second_strike ||= @strike && second_shot? && max_scored?
+    @strike && second_shot? && max_scored?
   end
 
   def max_scored?
