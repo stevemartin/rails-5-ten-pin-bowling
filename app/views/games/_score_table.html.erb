@@ -41,32 +41,22 @@
       </tr>
     </thead>
     <tbody>
-      <% @game.players.times do |player_num| %>
-        <% player_num += 1 %>
-        <% score_calc = CalculateScore.new(@game.shots.where(player: player_num)) %>
-        <% running_scores = RunningScore.new(score_calc) %>
+      <% @scoreboard.scoreboard.each_with_index do |row, i| %>
         <tr>
           <th>
-            Player: <%= player_num %>
-        </th>
-        <% session[:frame].times do |frame_num| %>
-          <% frame_num += 1 %>
+            Player: <%= i+1 %>
+          </th>
+        <% row[1..10].each do |cell| %>
           <td>
-            <% @game.shots.where(player: player_num, frame: frame_num).order(:number).each do |shot| %>
-              <% running_scores.accumulate(frame_num, shot) %>
-              <% if running_scores.score > 0 %>
-                <%= shot.pins %>
-                <b><%= running_scores.score %></b>
-              <% else %>
-                <%= shot.pins %>
-              <% end %>
-            <% end %>
+            <b><%= @scoreboard.total_for_frame(cell) %></b>
+            <div><%= @scoreboard.first_shot(cell) %></div>
+            <div><%= @scoreboard.second_shot(cell) %></div>
+            <div><%= @scoreboard.third_shot(cell) %></div>
           </td>
         <% end %>
-        <% (10 - session[:frame]).times do |empty_frame| %>
-          <td>&nbsp;</td>
-        <% end %>
-        <td><b><%= running_scores.total_score %></b></td>
+        <td>
+          <%= @scoreboard.grand_total(row) %>
+        </td>
         </tr>
       <% end %>
     </tbody>

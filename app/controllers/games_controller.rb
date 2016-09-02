@@ -7,6 +7,7 @@ class GamesController < ApplicationController
 
   def show
     @shot = @game.shots.build
+    @scoreboard = ScoreBoardPresenter.new(@game)
   end
 
   def new
@@ -32,8 +33,9 @@ class GamesController < ApplicationController
   def update
     respond_to do |format|
       if @game.update(game_params)
+        @scoreboard = ScoreBoardPresenter.new(@game)
         last_shot    = @game.shots.last
-        current_game = GameEngine.new(@game, session)
+        current_game = ::GameEngine.new(@game, session)
         current_game.update(last_shot)
         session.merge!(current_game.status)
 
@@ -41,6 +43,7 @@ class GamesController < ApplicationController
         format.json { render :show, status: :ok, location: @game }
       else
         @shot = @game.shots.last
+        @scoreboard = ScoreBoardPresenter.new(@game)
         format.js { render 'errors' }
         format.html { render :show, notice: 'Scores were not successfully updated.' }
         format.json { render json: @game.errors, status: :unprocessable_entity }
