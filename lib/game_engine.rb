@@ -23,12 +23,12 @@ class GameEngine
     if !tenth_frame?
       if strike?
         @strike = true
-        last_player? ? (@frame += 1 && @player = 1) : @player += 1
         @shot_number = 1
+        increment_player_or_frame
       elsif spare?
         @spare = true
-        last_player? ? (@frame += 1 && @player = 1) : @player += 1
         @shot_number = 1
+        increment_player_or_frame
       elsif first_shot?
         @strike = false
         @spare = false
@@ -77,6 +77,10 @@ class GameEngine
   end
 
   private
+  def increment_player_or_frame
+    last_player? ? (@frame += 1 && @player = 1) : @player += 1
+  end
+
   def standard_frame_ended?
     @shot_number == 2 && last_player? && !tenth_frame?
   end
